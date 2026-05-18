@@ -19,6 +19,54 @@ A cross-platform native phone app for tutoring, built with **React Native** (Exp
 - [React Navigation v7](https://reactnavigation.org/) — bottom tabs + native stack
 - TypeScript — full type safety throughout
 
+## 🐳 Run Locally with Docker
+
+The fastest way to run the app locally is via Docker. No Node.js installation needed.
+
+### Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/) ≥ 24
+- [Docker Compose](https://docs.docker.com/compose/install/) v2
+
+### Production build (nginx, port 3000)
+
+Builds the Expo web bundle and serves it with nginx:
+
+```bash
+docker compose up web --build
+```
+
+Open **http://localhost:3000** in your browser.
+
+> To run in the background: `docker compose up web --build -d`
+
+### Development server (hot-reload, port 8081)
+
+Mounts your local source files for live hot-reload:
+
+```bash
+docker compose --profile dev up dev --build
+```
+
+Open **http://localhost:8081** in your browser.
+
+### Stop containers
+
+```bash
+docker compose down
+```
+
+### Docker files at a glance
+
+| File | Purpose |
+|---|---|
+| `Dockerfile` | Multi-stage build → nginx production image |
+| `Dockerfile.dev` | Development server with hot-reload |
+| `docker-compose.yml` | Orchestrates `web` (prod) and `dev` services |
+| `nginx.conf` | SPA routing, gzip, asset caching |
+
+---
+
 ## Getting Started
 
 ### Prerequisites
@@ -49,6 +97,10 @@ Scan the QR code displayed in the terminal with **Expo Go** to open the app on y
 mytutor-/
 ├── App.tsx                   # Root component & navigation container
 ├── app.json                  # Expo configuration
+├── Dockerfile                # Production multi-stage Docker image
+├── Dockerfile.dev            # Development Docker image (hot-reload)
+├── docker-compose.yml        # Docker Compose services
+├── nginx.conf                # nginx SPA config for production container
 ├── src/
 │   ├── data/                 # Sample data & TypeScript types
 │   ├── navigation/           # Navigator setup & route types
